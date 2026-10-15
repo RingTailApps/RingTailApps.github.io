@@ -5,6 +5,10 @@ R = pathlib.Path(__file__).parent
 SRC = pathlib.Path('/workspace/weeknight-app/invite-web')
 APPLE = '<svg viewBox="0 0 24 24"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.35 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.78-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.39-.92-2.41-3.69zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>'
 STORE = f'<span class="store soon" aria-label="App Store, coming soon">{APPLE}<span><small>Coming soon to the</small><b>App Store</b></span></span>'
+GAL=[('01-weekly-plan','Plan the week in one tap'),('02-shared-grocery-list','Shared grocery list'),('03-recipe-detail','Recipe detail'),('04-potluck-planner','Potluck planner'),('05-levels-badges','Levels and badges'),('06-eat-out-wheel','Eat-out wheel')]
+def shot(n,a,cls='shot'): return f'<figure class="{cls}"><img src="/assets/gallery/{n}-360.webp" srcset="/assets/gallery/{n}-360.webp 360w, /assets/gallery/{n}-720.webp 720w" sizes="(max-width:600px) 62vw, 240px" width="360" height="782" alt="Chow Hall: {a}" loading="lazy" decoding="async"></figure>'
+def gallery(items, cls='gallery'): return f'<div class="{cls}" tabindex="0" aria-label="Chow Hall screenshots">{"".join(shot(n,a) for n,a in items)}</div>'
+PAGES=[]
 def page(path, title, desc, body, depth):
     p = '../' * depth
     html = f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -15,6 +19,7 @@ def page(path, title, desc, body, depth):
 <main>{body}</main>
 <footer><div class="wrap"><span>© 2026 RingTailApps. Made by a small team (okay, one raccoon).</span><nav><a href="/chowhall/">Chow Hall</a><a href="/support/">Support</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav></div></footer>
 </body></html>'''
+    PAGES.append(path)
     out = R / path; out.parent.mkdir(parents=True, exist_ok=True); out.write_text(html)
 def phone(n, cls='', alt=''): return f'<div class="phone {cls}"><img src="/assets/shots/{n}.jpg" alt="{alt}" loading="lazy"></div>'
 def card(ic, h, p, cls=''): return f'<div class="card {cls}"><div class="ic">{ic}</div><h3>{h}</h3><p>{p}</p></div>'
@@ -29,7 +34,8 @@ page('index.html', 'RingTailApps · Small apps, made with care', 'RingTailApps i
 <h2>Dinner, sorted for the whole week.</h2><p class="lead" style="font-size:17.5px">Chow Hall plans your family's meals, builds the grocery list for you and keeps everyone in the house on the same page, with a little help from a raccoon chef.</p>
 <ul class="ticks"><li>Plan your whole week in one tap</li><li>Chow Haul: a grocery list sorted by aisle</li><li>Shared lists and a potluck planner</li><li>Levels and badges as you cook</li></ul>
 <div class="btns" style="justify-content:flex-start;margin-top:0">{STORE}<a class="btn ghost" href="/chowhall/">Learn more</a></div></div>
-<div class="art">{phone('list','sm','Grocery list')}{phone('week','','Chow Hall week plan')}</div></div></div></section>
+<div class="art">{phone('list','sm','Grocery list')}{phone('week','','Chow Hall week plan')}</div></div>
+<div class="strip-wrap">{gallery(GAL[1:5],'gallery strip')}</div></div></section>
 <section class="alt"><div class="wrap"><div class="head"><div class="eyebrow">How we build</div><h2>Made with care, not clutter.</h2></div>
 <div class="grid c3">{card('🦝','Thoughtfully simple','Every screen earns its place. If a feature makes things harder, it doesn’t ship.')}{card('🔒','Private by default','No ads, no tracking and no selling data. Your stuff stays yours, mostly on your own phone.')}{card('🧡','Built for families','Real tools for busy households, designed to be easy for everyone at the table.')}</div></div></section>
 <section><div class="wrap"><div class="head"><div class="eyebrow">Our apps</div><h2>The den is just getting started.</h2></div>
@@ -49,6 +55,7 @@ page('chowhall/index.html', 'Chow Hall · The friendly dinner planner', 'Plan th
 <h1>What’s for dinner? Sorted.</h1><p class="lead">Chow Hall plans the week, writes the grocery list and keeps the whole house in sync, with simple everyday dinners your family will actually eat.</p>
 <div class="btns">{STORE}</div>
 <div class="phones">{phone('potluck','side','Potluck')}{phone('detail','','Recipe')}{phone('badges','side','Badges')}</div></div></section>
+<section class="galsec"><div class="wrap"><div class="head"><div class="eyebrow">Screenshots</div><h2>A look inside.</h2></div></div>{gallery(GAL)}<p class="galhint">Swipe to see more →</p></section>
 <section><div class="wrap">{rows}
 <div class="row"><div class="txt"><div class="eyebrow">05</div><h2>Can’t decide?</h2><p class="lead" style="font-size:18px">Spin the wheel and let Chow Hall pick, whether it’s dinner at home or a night out.</p></div>{phone('eatout','','Eat out wheel')}</div>
 <div class="mascot"><img src="/assets/raccoon-chef.png" alt="Raccoon chef"><div><h3 style="font-size:22px">Meet your chef.</h3><p style="margin:6px 0 0;color:var(--mute)">A friendly raccoon chef guides you through the app, celebrates your wins, and even dresses up for the holidays.</p></div></div></div></section>
@@ -80,3 +87,7 @@ def legal(name, title):
     assert 'eeknight' not in body
     page(f'{name}/index.html', f'{title} · RingTailApps', f'{title} for Chow Hall by RingTailApps.', f'<div class="doc">{body}</div>', 1)
 legal('privacy','Privacy Policy'); legal('terms','Terms of Use')
+
+urls=sorted({'https://ringtailapps.com/'+p.replace('index.html','') for p in PAGES})
+(R/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{u}</loc><lastmod>2026-10-15</lastmod></url>\n' for u in urls)+'</urlset>\n')
+(R/'robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: https://ringtailapps.com/sitemap.xml\n')
