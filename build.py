@@ -56,7 +56,7 @@ page('chowhall/index.html', 'Chow Hall · The friendly dinner planner', 'Plan th
 <section style="padding-top:0"><div class="wrap"><div class="cta"><h2>Coming soon to the App Store.</h2><p>Want to know when it launches? Email us and we’ll let you know.</p><div class="btns"><a class="btn" href="mailto:ringtailapps@gmail.com?subject=Chow%20Hall%20launch">Notify me</a><a class="btn ghost" href="/support/">Support</a></div></div></div></section>''', 1)
 
 faq = [('Is Chow Hall free?','Yes. Planning your week, recipes, the grocery list, shared lists and potlucks are free. Chow Hall Pro is an optional subscription that adds extras like budget mode.'),
-('Do I need an account?','No. Chow Hall works without one, and your plan stays on your phone. An account lets you back up your data and share lists and potlucks.'),
+('Do I need an account?','No. Chow Hall works without one, and your plan stays on your phone. A free account lets you share grocery lists and run potlucks. Backup &amp; sync across your devices is part of Chow Hall Pro.'),
 ('How do I share my grocery list?','Open your list, tap Share and send the invite to your household. They can join with the link or by typing the code in Chow Hall.'),
 ('I forgot my password.','On the sign-in screen, tap “Forgot password?” and we’ll email you a link to set a new one. Check your spam folder if it doesn’t arrive within a few minutes.'),
 ('How do I cancel Pro?','Subscriptions are managed by Apple. On your iPhone, open Settings, tap your name, then Subscriptions, and choose Chow Hall. Deleting the app doesn’t cancel it.'),
@@ -80,3 +80,7 @@ def legal(name, title):
     assert 'eeknight' not in body
     page(f'{name}/index.html', f'{title} · RingTailApps', f'{title} for Chow Hall by RingTailApps.', f'<div class="doc">{body}</div>', 1)
 legal('privacy','Privacy Policy'); legal('terms','Terms of Use')
+
+# sitemap + robots (no gallery)
+(R / 'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(f'  <url><loc>https://ringtailapps.com/{p}</loc></url>\n' for p in ['', 'chowhall/', 'privacy/', 'support/', 'terms/']) + '</urlset>\n')
+(R / 'robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: https://ringtailapps.com/sitemap.xml\n')
