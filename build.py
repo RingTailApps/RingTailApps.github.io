@@ -5,10 +5,10 @@ R = pathlib.Path(__file__).parent
 SRC = pathlib.Path('/workspace/weeknight-app/invite-web')
 APPLE = '<svg viewBox="0 0 24 24"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.35 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.78-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.39-.92-2.41-3.69zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>'
 STORE = f'<span class="store soon" aria-label="App Store, coming soon">{APPLE}<span><small>Coming soon to the</small><b>App Store</b></span></span>'
-def page(path, title, desc, body, depth):
+def page(path, title, desc, body, depth, og='ringtail-logo.png'):
     p = '../' * depth
     html = f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{title}</title><meta name="description" content="{desc}"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><meta property="og:image" content="https://ringtailapps.com/assets/ringtail-logo.png"><meta name="theme-color" content="#FBF6EE">
+<title>{title}</title><meta name="description" content="{desc}"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><meta property="og:image" content="https://ringtailapps.com/assets/{og}"><meta name="theme-color" content="#FBF6EE">
 <link rel="icon" href="/assets/favicon.png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><link rel="stylesheet" href="/assets/site.css"></head><body>
 <header class="nav"><div class="wrap"><a class="brand" href="/"><img src="/assets/ringtail-logo.png" alt="">RingTailApps</a>
 <nav class="links"><a href="/chowhall/">Chow Hall</a><a href="/support/">Support</a><a class="hide-sm" href="/privacy/">Privacy</a></nav></div></header>
@@ -27,7 +27,7 @@ page('index.html', 'RingTailApps · Small apps, made with care', 'RingTailApps i
 <section style="padding-top:20px"><div class="wrap"><div class="feature">
 <div class="copy"><div class="appid"><img src="/assets/chowhall-icon.png" alt="Chow Hall icon"><div><div class="eyebrow">Our first app</div><b>Chow Hall</b></div></div>
 <h2>Dinner, sorted for the whole week.</h2><p class="lead" style="font-size:17.5px">Chow Hall plans your family's meals, builds the grocery list for you and keeps everyone in the house on the same page, with a little help from a raccoon chef.</p>
-<ul class="ticks"><li>Plan your whole week in one tap</li><li>Chow Haul: a grocery list sorted by aisle</li><li>Shared lists and a potluck planner</li><li>Levels and badges as you cook</li></ul>
+<ul class="ticks"><li>Plan your whole week in one tap</li><li>Chow Haul: a grocery list sorted by aisle</li><li>Shared lists and a potluck planner</li><li>Levels and badges as you cook</li><li>Converter, cooking chart and kitchen timers</li></ul>
 <div class="btns" style="justify-content:flex-start;margin-top:0">{STORE}<a class="btn ghost" href="/chowhall/">Learn more</a></div></div>
 <div class="art">{phone('list','sm','Grocery list')}{phone('week','','Chow Hall week plan')}</div></div></div></section>
 <section class="alt"><div class="wrap"><div class="head"><div class="eyebrow">How we build</div><h2>Made with care, not clutter.</h2></div>
@@ -42,7 +42,8 @@ page('index.html', 'RingTailApps · Small apps, made with care', 'RingTailApps i
 feat = [('week','Plan my week','Tell Chow Hall who you’re feeding and what you like, and it fills the week with simple family dinners in one tap. Swap anything you don’t feel like.'),
 ('list','Chow Haul grocery list','Every ingredient lands on one list, combined and sorted by aisle, so the store trip is quick. Seasonings you already have stay off it.'),
 ('potluck','Potluck planner','Host a potluck, share one link, and let guests claim a dish. No more five bags of chips and no dessert.'),
-('badges','Levels and badges','Earn chef points every time you cook, level up and collect badges. Your raccoon chef cheers you on.')]
+('badges','Levels and badges','Earn chef points every time you cook, level up and collect badges. Your raccoon chef cheers you on.'),
+('converter','Kitchen tools built in','A measurement converter for cups, grams and oven temps, a cooking chart with USDA safe temperatures, and kitchen timers you can name and run side by side.')]
 rows = ''.join(f'<div class="row{" flip" if i%2 else ""}"><div class="txt"><div class="eyebrow">0{i+1}</div><h2>{h}</h2><p class="lead" style="font-size:18px">{p}</p></div>{phone(n,"",h)}</div>' for i,(n,h,p) in enumerate(feat))
 page('chowhall/index.html', 'Chow Hall · The friendly dinner planner', 'Plan the week, build the grocery list and share it with the whole house. Chow Hall is coming soon to iPhone.', f'''
 <section class="apphero"><div class="wrap"><img class="icon" src="/assets/chowhall-icon.png" alt="Chow Hall icon"><div class="eyebrow">For iPhone · by RingTailApps</div>
@@ -50,10 +51,10 @@ page('chowhall/index.html', 'Chow Hall · The friendly dinner planner', 'Plan th
 <div class="btns">{STORE}</div>
 <div class="phones">{phone('potluck','side','Potluck')}{phone('detail','','Recipe')}{phone('badges','side','Badges')}</div></div></section>
 <section><div class="wrap">{rows}
-<div class="row"><div class="txt"><div class="eyebrow">05</div><h2>Can’t decide?</h2><p class="lead" style="font-size:18px">Spin the wheel and let Chow Hall pick, whether it’s dinner at home or a night out.</p></div>{phone('eatout','','Eat out wheel')}</div>
+<div class="row flip"><div class="txt"><div class="eyebrow">06</div><h2>Can’t decide?</h2><p class="lead" style="font-size:18px">Spin the wheel and let Chow Hall pick, whether it’s dinner at home or a night out.</p></div>{phone('eatout','','Eat out wheel')}</div>
 <div class="mascot"><img src="/assets/raccoon-chef.png" alt="Raccoon chef"><div><h3 style="font-size:22px">Meet your chef.</h3><p style="margin:6px 0 0;color:var(--mute)">A friendly raccoon chef guides you through the app, celebrates your wins, and even dresses up for the holidays.</p></div></div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="grid c3">{card('🍳','Real family food','Simple everyday American dinners, plus breakfasts and lunches, with step-by-step cooking mode.')}{card('👨‍👩‍👧','Shared lists','Invite your household with a code. Checks sync to everyone’s phone instantly.')}{card('⭐','Chow Hall Pro','Optional Pro unlocks extras like budget mode. The core planner is free.')}</div></div></section>
-<section style="padding-top:0"><div class="wrap"><div class="cta"><h2>Coming soon to the App Store.</h2><p>Want to know when it launches? Email us and we’ll let you know.</p><div class="btns"><a class="btn" href="mailto:ringtailapps@gmail.com?subject=Chow%20Hall%20launch">Notify me</a><a class="btn ghost" href="/support/">Support</a></div></div></div></section>''', 1)
+<section style="padding-top:0"><div class="wrap"><div class="cta"><h2>Coming soon to the App Store.</h2><p>Want to know when it launches? Email us and we’ll let you know.</p><div class="btns"><a class="btn" href="mailto:ringtailapps@gmail.com?subject=Chow%20Hall%20launch">Notify me</a><a class="btn ghost" href="/support/">Support</a></div></div></div></section>''', 1, og='chowhall-icon.png')
 
 faq = [('Is Chow Hall free?','Yes. Planning your week, recipes, the grocery list, shared lists and potlucks are free. Chow Hall Pro is an optional subscription that adds extras like budget mode.'),
 ('Do I need an account?','No. Chow Hall works without one, and your plan stays on your phone. A free account lets you share grocery lists and run potlucks. Backup &amp; sync across your devices is part of Chow Hall Pro.'),
